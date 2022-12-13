@@ -60,7 +60,8 @@ describe('ShoppingCart', () => {
   });
 
   /**
-   *
+   * Teste unitário do carrinho de compras com Jest.
+   * Nesse momento, o carrinho tem dois itens. Estou testando quando os dois itens são excluídos.
    */
 
   it('should remove products', () => {
@@ -72,5 +73,19 @@ describe('ShoppingCart', () => {
     // remove o item no índice "0". como o carrinho tem apenas dois itens, se for removido o segundo item, deve ficar vazio "empty"
     sut.removeItem(0);
     expect(sut.isEmpty()).toBe(true);
+  });
+
+  it('should call discount.calculate once when totalWidthDiscount is called', () => {
+    const { sut, discountMock } = createSutWithProducts();
+    const discountMockSpy = jest.spyOn(discountMock, 'calculate');
+    sut.totalWidthDiscount();
+    expect(discountMockSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call discount.calculate with total price when totalWidthDiscount is called', () => {
+    const { sut, discountMock } = createSutWithProducts();
+    const discountMockSpy = jest.spyOn(discountMock, 'calculate');
+    sut.totalWidthDiscount();
+    expect(discountMockSpy).toHaveBeenCalledWith(sut.total());
   });
 });
